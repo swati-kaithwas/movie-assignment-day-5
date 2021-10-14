@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+    <style>
+     *{
+         background-color: rgb(212, 134, 134);
+     }
+     img{
+         width:20%;
+         height:20%;
+     }
+     #movies{
+            width:206px;
+            height: 200px;
+            border: 1px solid black;
+            overflow: scroll;
+            border-top:none;
+        }
+
+    </style>
+    <body>
+    <h1>Movie Search Engine I</h1>
+    <input oninput="debounce(main,1000)" type="text" id="movie" placeholder="Search Name"/>
+ <button onclick="MovieSearch()">search</button>
+
+
+ 
+
+ <div id="movies"></div>
+ 
+
+ <div id="movies1"></div>
+
+    </body>
+
+    
+<script>
+    
+       
+       let container=document.getElementById("movies1");
+   async function MovieSearch()
+   {
+       let Search=document.getElementById("movie").value;
+
+       
+       let res=await fetch(`http://www.omdbapi.com/?t=${Search}&apikey=c8bca29b`);
+       
+        let movies= await res.json();
+        showMovies(movies);
+        console.log(movies);
+   }
+
+   function showMovies(rating)
+   {
+      container.innerHTML=null;
+     let div=document.createElement('div');
+       let name=document.createElement("p");
+         name.innerText=rating.Title;
+         let img=document.createElement("img");
+           img.src=rating.Poster;
+         let imdb_rating = document.createElement("p");
+         imdb_rating.innerText=rating.imdbRating;
+         let year=document.createElement("p");
+          year.innerText=rating.Year;
+        
+          
+      
+         
+          div.append(img,name,imdb_rating,year);
+         container.append(div);
+    
+   }
+   var timerId;
+     
+     let movies_div=document.getElementById("movies");
+ 
+ //searchMovies
+ 
+ async function searchMovies(movie_name){
+     try{
+ 
+         let res=await fetch(`http://www.omdbapi.com/?apikey=e6bcaee0&s=${movie_name}`);
+ 
+         let data=await res.json();
+ 
+         return data;
+ 
+     }
+     catch(e){
+        console.log("e:",e);
+     }
+ }
+ 
+ 
+ function appendMovies(movies){
+     movies_div.innerHTML=null;
+ 
+     if(movies===undefined){
+         return false
+     }
+ 
+     movies.forEach(function(movie){
+ 
+         let p=document.createElement("p");
+ 
+         p.innerText=movie.Title;
+ 
+         movies_div.append(p);
+     });
+ }
+ 
+ 
+ 
+ async function main(){
+ 
+     let name=document.getElementById("movie").value;
+ 
+     //get search Movies
+ 
+     if(name.length<3){
+         return false;
+     }
+ 
+     let res=await searchMovies(name);
+ 
+     let movies_data=res.Search;
+ 
+     appendMovies(movies_data);
+ 
+     console.log("res:",res);
+ 
+ }
+ 
+ 
+ function debounce(func,delay){
+ 
+     //func = main() function
+ 
+     //ave - setTimeout - func -main()
+     //aven - clear the previous timeout - settimeout - func() - main()- searchMovies("aven")
+ 
+     if(timerId){
+         clearTimeout(timerId);
+     }
+ 
+     timerId=setTimeout(function(){
+ 
+         func();
+ 
+ 
+     },delay);
+ 
+ 
+ 
+ 
+ }
+
+
+
+
+
+
+</script>
+</html>
