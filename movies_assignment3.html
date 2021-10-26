@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+ /* *{
+       background-image:url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYkr-BjtTP1WiRqHTLcW5ZQRbJxQH8dJQZOQ&usqp=CAU");
+       background-size: cover;
+}  */
+button{
+     font-size: larger;
+       background-color: purple;
+       color:white;
+       height:max-content;
+}
+h1{
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+}
+</style>
+<body>
+    <h1>Movies.com</h1>
+    <button onclick="getmovieData()">Popular Movies</button>
+     <button onclick="getmovietop()">Top Movies </button>
+     <button onclick="getmovieupcoming()">UpComing Movies</button>
+   <div id="data"></div> 
+   <div id="data1"></div>
+</body>
+
+<script>
+    let parent1=document.getElementById("data");
+    let parent2=document.getElementById("data1");
+    async function getmovieData()
+    {  
+        parent1.innerHTML=null;
+          parent2.innerHTML=null;
+
+         let res=await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=8205d50f89515f0a94ef2bcb7849d5ed`);
+         let data =await res.json();
+         
+    
+    if(data.Response=="false")
+    {
+        showErorr();
+    }
+
+else {
+   showMovie(data.results);
+   console.log(data.results);
+}
+    }
+
+async function getmovietop()
+    {  
+        parent1.innerHTML=null;
+          parent2.innerHTML=null;
+
+         let res=await fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=8205d50f89515f0a94ef2bcb7849d5ed`);
+         let data =await res.json();
+        // console.log(data);
+    
+    if(data.Response=="false")
+    {
+        showErorr();
+    }
+
+else {
+    showMovie(data.results);
+   console.log(data.results);
+}
+    }
+
+    async function getmovieupcoming()
+    {  
+        parent1.innerHTML=null;
+          parent2.innerHTML=null;
+
+         let res=await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=8205d50f89515f0a94ef2bcb7849d5ed`);
+         let data =await res.json();
+        // console.log(data);
+    
+    if(data.Response=="false")
+    {
+        showErorr();
+    }
+
+else {
+    showMovie(data.results);
+   console.log(data.results);
+}
+    }
+function showMovie(result)
+{
+    parent1.innerHTML=null;
+    parent2.innerHTML=null;
+    result.forEach(function(showingresult) {
+     
+        let div =document.createElement("div");
+        let img=document.createElement("img");
+        img.src="https://image.tmdb.org/t/p/w500"+showingresult.poster_path;
+        img.style.width="200px";
+        let title_movies=document.createElement("div");
+        title_movies.textContent=showingresult.title;
+        div.append(img,title_movies);
+        parent2.append(div);
+        img.onclick=function() {
+          dataShow(showingresult);
+        }
+
+    });
+    }
+
+
+    
+    function dataShow(data) {
+    parent1.innerHTML=null;
+    parent2.innerHTML=null;
+
+    let div =document.createElement("div");
+        let img=document.createElement("img");
+        img.src="https://image.tmdb.org/t/p/w550"+data.poster_path;
+        let title_movies=document.createElement("div");
+        title_movies.textContent=showingresult.title;
+        div.append(img,title_movies);
+        parent1.append(div);
+}
+
+
+    function showErorr()
+
+    {
+        parent1.innerHTML=null;
+          parent2.innerHTML=null;
+        let div =document.createElement("div");
+        let img=document.createElement("img");
+        img.src="https://cdn.w600.comps.canstockphoto.com/error-404-not-found-dark-metal-icon-eps-vectors_csp28187832.jpg";
+        img.style.width="700px";
+        div.append(img);
+        parent1.append(div);
+    }
+
+</script>
+</html>
